@@ -1,0 +1,185 @@
+User
+id	Integer	Unique identifier for this user or bot
+first_name	String	User‘s or bot’s first name
+last_name	String	Optional. User‘s or bot’s last name
+username	String	Optional. User‘s or bot’s username
+
+Chat
+id	Integer	Unique identifier for this chat. This number may be greater than 32 bits and some programming languages may have difficulty/silent defects in interpreting it. But it smaller than 52 bits, so a signed 64 bit integer or double-precision float type are safe for storing this identifier.
+type	String	Type of chat, can be either “private”, “group”, “supergroup” or “channel”
+title	String	Optional. Title, for supergroups, channels and group chats
+username	String	Optional. Username, for private chats, supergroups and channels if available
+first_name	String	Optional. First name of the other party in a private chat
+last_name	String	Optional. Last name of the other party in a private chat
+
+Message
+message_id	Integer	Unique message identifier
+from	User	Optional. Sender, can be empty for messages sent to channels
+date	Integer	Date the message was sent in Unix time
+chat	Chat	Conversation the message belongs to
+forward_from	User	Optional. For forwarded messages, sender of the original message
+forward_from_chat	Chat	Optional. For messages forwarded from a channel, information about the original channel
+forward_date	Integer	Optional. For forwarded messages, date the original message was sent in Unix time
+reply_to_message	Message	Optional. For replies, the original message. Note that the Message object in this field will not contain further reply_to_message fields even if it itself is a reply.
+edit_date	Integer	Optional. Date the message was last edited in Unix time
+text	String	Optional. For text messages, the actual UTF-8 text of the message, 0-4096 characters.
+entities	Array of MessageEntity	Optional. For text messages, special entities like usernames, URLs, bot commands, etc. that appear in the text
+audio	Audio	Optional. Message is an audio file, information about the file
+document	Document	Optional. Message is a general file, information about the file
+photo	Array of PhotoSize	Optional. Message is a photo, available sizes of the photo
+sticker	Sticker	Optional. Message is a sticker, information about the sticker
+video	Video	Optional. Message is a video, information about the video
+voice	Voice	Optional. Message is a voice message, information about the file
+caption	String	Optional. Caption for the document, photo or video, 0-200 characters
+contact	Contact	Optional. Message is a shared contact, information about the contact
+location	Location	Optional. Message is a shared location, information about the location
+venue	Venue	Optional. Message is a venue, information about the venue
+new_chat_member	User	Optional. A new member was added to the group, information about them (this member may be the bot itself)
+left_chat_member	User	Optional. A member was removed from the group, information about them (this member may be the bot itself)
+new_chat_title	String	Optional. A chat title was changed to this value
+new_chat_photo	Array of PhotoSize	Optional. A chat photo was change to this value
+delete_chat_photo	True	Optional. Service message: the chat photo was deleted
+group_chat_created	True	Optional. Service message: the group has been created
+supergroup_chat_created	True	Optional. Service message: the supergroup has been created. This field can‘t be received in a message coming through updates, because bot can’t be a member of a supergroup when it is created. It can only be found in reply_to_message if someone replies to a very first message in a directly created supergroup.
+channel_chat_created	True	Optional. Service message: the channel has been created. This field can‘t be received in a message coming through updates, because bot can’t be a member of a channel when it is created. It can only be found in reply_to_message if someone replies to a very first message in a channel.
+migrate_to_chat_id	Integer	Optional. The group has been migrated to a supergroup with the specified identifier. This number may be greater than 32 bits and some programming languages may have difficulty/silent defects in interpreting it. But it smaller than 52 bits, so a signed 64 bit integer or double-precision float type are safe for storing this identifier.
+migrate_from_chat_id	Integer	Optional. The supergroup has been migrated from a group with the specified identifier. This number may be greater than 32 bits and some programming languages may have difficulty/silent defects in interpreting it. But it smaller than 52 bits, so a signed 64 bit integer or double-precision float type are safe for storing this identifier.
+pinned_message	Message	Optional. Specified message was pinned. Note that the Message object in this field will not contain further reply_to_message fields even if it is itself a reply.
+
+MessageEntity
+type	String	Type of the entity. Can be mention (@username), hashtag, bot_command, url, email, bold (bold text), italic (italic text), code (monowidth string), pre (monowidth block), text_link (for clickable text URLs), text_mention (for users without usernames)
+offset	Integer	Offset in UTF-16 code units to the start of the entity
+length	Integer	Length of the entity in UTF-16 code units
+url	String	Optional. For “text_link” only, url that will be opened after user taps on the text
+user	User	Optional. For “text_mention” only, the mentioned user
+
+PhotoSize
+file_id	String	Unique identifier for this file
+width	Integer	Photo width
+height	Integer	Photo height
+file_size	Integer	Optional. File size
+
+Audio
+file_id	String	Unique identifier for this file
+duration	Integer	Duration of the audio in seconds as defined by sender
+performer	String	Optional. Performer of the audio as defined by sender or by audio tags
+title	String	Optional. Title of the audio as defined by sender or by audio tags
+mime_type	String	Optional. MIME type of the file as defined by sender
+file_size	Integer	Optional. File size
+
+Document
+file_id	String	Unique file identifier
+thumb	PhotoSize	Optional. Document thumbnail as defined by sender
+file_name	String	Optional. Original filename as defined by sender
+mime_type	String	Optional. MIME type of the file as defined by sender
+file_size	Integer	Optional. File size
+
+Sticker
+file_id	String	Unique identifier for this file
+width	Integer	Sticker width
+height	Integer	Sticker height
+thumb	PhotoSize	Optional. Sticker thumbnail in .webp or .jpg format
+emoji	String	Optional. Emoji associated with the sticker
+file_size	Integer	Optional. File size
+
+Video
+file_id	String	Unique identifier for this file
+width	Integer	Video width as defined by sender
+height	Integer	Video height as defined by sender
+duration	Integer	Duration of the video in seconds as defined by sender
+thumb	PhotoSize	Optional. Video thumbnail
+mime_type	String	Optional. Mime type of a file as defined by sender
+file_size	Integer	Optional. File size
+
+Voice
+file_id	String	Unique identifier for this file
+duration	Integer	Duration of the audio in seconds as defined by sender
+mime_type	String	Optional. MIME type of the file as defined by sender
+file_size	Integer	Optional. File size
+
+Contact
+phone_number	String	Contact's phone number
+first_name	String	Contact's first name
+last_name	String	Optional. Contact's last name
+user_id	Integer	Optional. Contact's user identifier in Telegram
+
+Location
+longitude	Float	Longitude as defined by sender
+latitude	Float	Latitude as defined by sender
+
+Venue
+location	Location	Venue location
+title	String	Name of the venue
+address	String	Address of the venue
+foursquare_id	String	Optional. Foursquare identifier of the venue
+
+UserProfilePhotos
+total_count	Integer	Total number of profile pictures the target user has
+photos	Array of Array of PhotoSize	Requested profile pictures (in up to 4 sizes each)
+
+File
+file_id	String	Unique identifier for this file
+file_size	Integer	Optional. File size, if known
+file_path	String	Optional. File path. Use https://api.telegram.org/file/bot<token>/<file_path> to get the file.
+
+ReplyKeyboardMarkup
+keyboard	Array of Array of KeyboardButton	Array of button rows, each represented by an Array of KeyboardButton objects
+resize_keyboard	Boolean	Optional. Requests clients to resize the keyboard vertically for optimal fit (e.g., make the keyboard smaller if there are just two rows of buttons). Defaults to false, in which case the custom keyboard is always of the same height as the app's standard keyboard.
+one_time_keyboard	Boolean	Optional. Requests clients to hide the keyboard as soon as it's been used. The keyboard will still be available, but clients will automatically display the usual letter-keyboard in the chat – the user can press a special button in the input field to see the custom keyboard again. Defaults to false.
+selective	Boolean	Optional. Use this parameter if you want to show the keyboard to specific users only. Targets: 1) users that are @mentioned in the text of the Message object; 2) if the bot's message is a reply (has reply_to_message_id), sender of the original message.
+
+KeyboardButton
+text	String	Text of the button. If none of the optional fields are used, it will be sent to the bot as a message when the button is pressed
+request_contact	Boolean	Optional. If True, the user's phone number will be sent as a contact when the button is pressed. Available in private chats only
+request_location	Boolean	Optional. If True, the user's current location will be sent when the button is pressed. Available in private chats only
+
+ReplyKeyboardHide
+hide_keyboard	True	Requests clients to hide the custom keyboard
+selective	Boolean	Optional. Use this parameter if you want to hide keyboard for specific users only. Targets: 1) users that are @mentioned in the text of the Message object; 2) if the bot's message is a reply (has reply_to_message_id), sender of the original message.
+
+InlineKeyboardMarkup
+inline_keyboard	Array of Array of InlineKeyboardButton	Array of button rows, each represented by an Array of InlineKeyboardButton objects
+
+InlineKeyboardButton
+text	String	Label text on the button
+url	String	Optional. HTTP url to be opened when button is pressed
+callback_data	String	Optional. Data to be sent in a callback query to the bot when button is pressed, 1-64 bytes
+switch_inline_query	String	Optional. If set, pressing the button will prompt the user to select one of their chats, open that chat and insert the bot‘s username and the specified inline query in the input field. Can be empty, in which case just the bot’s username will be inserted.
+
+CallbackQuery
+id	String	Unique identifier for this query
+from	User	Sender
+message	Message	Optional. Message with the callback button that originated the query. Note that message content and message date will not be available if the message is too old
+inline_message_id	String	Optional. Identifier of the message sent via the bot in inline mode, that originated the query
+data	String	Data associated with the callback button. Be aware that a bad client can send arbitrary data in this field
+
+ForceReply
+force_reply	True	Shows reply interface to the user, as if they manually selected the bot‘s message and tapped ’Reply'
+selective	Boolean	Optional. Use this parameter if you want to force reply from specific users only. Targets: 1) users that are @mentioned in the text of the Message object; 2) if the bot's message is a reply (has reply_to_message_id), sender of the original message.
+
+ChatMember
+user	User	Information about the user
+status	String	The member's status in the chat. Can be “creator”, “administrator”, “member”, “left” or “kicked”
+
+Update
+update_id	Integer	The update‘s unique identifier. Update identifiers start from a certain positive number and increase sequentially. This ID becomes especially handy if you’re using Webhooks, since it allows you to ignore repeated updates or to restore the correct update sequence, should they get out of order.
+message	Message	Optional. New incoming message of any kind — text, photo, sticker, etc.
+edited_message	Message	Optional. New version of a message that is known to the bot and was edited
+inline_query	InlineQuery	Optional. New incoming inline query
+chosen_inline_result	ChosenInlineResult	Optional. The result of an inline query that was chosen by a user and sent to their chat partner.
+callback_query	CallbackQuery	Optional. New incoming callback query
+
+InlineQuery
+id	String	Unique identifier for this query
+from	User	Sender
+location	Location	Optional. Sender location, only for bots that request user location
+query	String	Text of the query (up to 512 characters)
+offset	String	Offset of the results to be returned, can be controlled by the bot
+
+ChosenInlineResult
+result_id	String	The unique identifier for the result that was chosen
+from	User	The user that chose the result
+location	Location	Optional. Sender location, only for bots that require user location
+inline_message_id	String	Optional. Identifier of the sent inline message. Available only if there is an inline keyboard attached to the message. Will be also received in callback queries and can be used to edit the message.
+query	String	The query that was used to obtain the result
+
