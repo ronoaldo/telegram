@@ -53,6 +53,8 @@ type Message struct {
 	Audio *Audio `json:"audio,omitempty"`
 	// Optional. Message is a general file, information about the file
 	Document *Document `json:"document,omitempty"`
+	// Optional. Message is a game, information about the game. More about games »
+	Game *Game `json:"game,omitempty"`
 	// Optional. Message is a photo, available sizes of the photo
 	Photo []*PhotoSize `json:"photo,omitempty"`
 	// Optional. Message is a sticker, information about the sticker
@@ -342,4 +344,44 @@ type ChosenInlineResult struct {
 	InlineMessageId string `json:"inline_message_id,omitempty"`
 	// The query that was used to obtain the result
 	Query string `json:"query,omitempty"`
+}
+
+type Game struct {
+	// Title of the game
+	Title string `json:"title,omitempty"`
+	// Description of the game
+	Description string `json:"description,omitempty"`
+	// Photo that will be displayed in the game message in chats.
+	Photo []*PhotoSize `json:"photo,omitempty"`
+	// Optional. Brief description of the game or high scores included in the game message. Can be automatically edited to include current high scores for the game when the bot calls setGameScore, or manually edited using editMessageText. 0-4096 characters.
+	Text string `json:"text,omitempty"`
+	// Optional. Special entities that appear in text, such as usernames, URLs, bot commands, etc.
+	TextEntities []*MessageEntity `json:"text_entities,omitempty"`
+	// Optional. Animation that will be displayed in the game message in chats. Upload via BotFather
+	Animation *Animation `json:"animation,omitempty"`
+}
+
+type Animation struct {
+	// Unique file identifier
+	FileId string `json:"file_id,omitempty"`
+	// Optional. Animation thumbnail as defined by sender
+	Thumb *PhotoSize `json:"thumb,omitempty"`
+	// Optional. Original animation filename as defined by sender
+	FileName string `json:"file_name,omitempty"`
+	// Optional. MIME type of the file as defined by sender
+	MimeType string `json:"mime_type,omitempty"`
+	// Optional. File size
+	FileSize int64 `json:"file_size,omitempty"`
+}
+
+type CallbackGame struct {
+}
+
+type GameHighScore struct {
+	// Position in high score table for the game
+	Position int64 `json:"position,omitempty"`
+	// User
+	User *User `json:"user,omitempty"`
+	// Score
+	Score int64 `json:"score,omitempty"`
 }

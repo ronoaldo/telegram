@@ -26,6 +26,7 @@ text	String	Optional. For text messages, the actual UTF-8 text of the message, 0
 entities	Array of MessageEntity	Optional. For text messages, special entities like usernames, URLs, bot commands, etc. that appear in the text
 audio	Audio	Optional. Message is an audio file, information about the file
 document	Document	Optional. Message is a general file, information about the file
+game	Game	Optional. Message is a game, information about the game. More about games »
 photo	Array of PhotoSize	Optional. Message is a photo, available sizes of the photo
 sticker	Sticker	Optional. Message is a sticker, information about the sticker
 video	Video	Optional. Message is a video, information about the video
@@ -182,4 +183,32 @@ from	User	The user that chose the result
 location	Location	Optional. Sender location, only for bots that require user location
 inline_message_id	String	Optional. Identifier of the sent inline message. Available only if there is an inline keyboard attached to the message. Will be also received in callback queries and can be used to edit the message.
 query	String	The query that was used to obtain the result
+
+Game
+title	String	Title of the game
+description	String	Description of the game
+photo	Array of PhotoSize	Photo that will be displayed in the game message in chats.
+text	String	Optional. Brief description of the game or high scores included in the game message. Can be automatically edited to include current high scores for the game when the bot calls setGameScore, or manually edited using editMessageText. 0-4096 characters.
+text_entities	Array of MessageEntity	Optional. Special entities that appear in text, such as usernames, URLs, bot commands, etc.
+animation	Animation	Optional. Animation that will be displayed in the game message in chats. Upload via BotFather
+
+Animation
+file_id	String	Unique file identifier
+thumb	PhotoSize	Optional. Animation thumbnail as defined by sender
+file_name	String	Optional. Original animation filename as defined by sender
+mime_type	String	Optional. MIME type of the file as defined by sender
+file_size	Integer	Optional. File size
+
+CallbackGame
+user_id	Integer	Yes	User identifier
+score	Integer	Yes	New score, must be positive
+chat_id	Integer or String	Optional	Required if inline_message_id is not specified. Unique identifier for the target chat (or username of the target channel in the format @channelusername)
+message_id	Integer	Optional	Required if inline_message_id is not specified. Unique identifier of the sent message
+inline_message_id	String	Optional	Required if chat_id and message_id are not specified. Identifier of the inline message
+edit_message	Boolean	Optional	Pass True, if the game message should be automatically edited to include the current scoreboard
+
+GameHighScore
+position	Integer	Position in high score table for the game
+user	User	User
+score	Integer	Score
 
