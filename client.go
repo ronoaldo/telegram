@@ -132,6 +132,20 @@ func (t *ApiClient) SendMessage(to, text string) (*Message, error) {
 	return msg, nil
 }
 
+// SendFormattedMessage sends a formatted message in either HTML or Markdown.
+func (t *ApiClient) SendFormattedMessage(to, text string, parseMode ParseMode) (*Message, error) {
+	params := map[string]string{
+		"chat_id":    to,
+		"text":       text,
+		"parse_mode": string(parseMode),
+	}
+	msg := new(Message)
+	if err := t.Call("POST", "sendMessage", params, msg); err != nil {
+		return nil, err
+	}
+	return msg, nil
+}
+
 // SendMessagef calls fmt.Sprintf and passes the resulting message to SendMessage.
 func (t *ApiClient) SendMessagef(to, formatText string, args ...interface{}) (*Message, error) {
 	return t.SendMessage(to, fmt.Sprintf(formatText, args...))
