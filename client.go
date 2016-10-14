@@ -21,6 +21,9 @@ type ApiClient struct {
 	client *http.Client
 	token  string
 	debug  DebugFunc
+
+	botEndpoint      string
+	downloadEndpoint string
 }
 
 func stderrDebug(msg string) {
@@ -30,14 +33,24 @@ func stderrDebug(msg string) {
 // NewApiClient returns an instance of a Telegram Bot API client.
 func NewApiClient(c *http.Client, token string) *ApiClient {
 	return &ApiClient{
-		client: c,
-		token:  token,
-		debug:  stderrDebug,
+		client:           c,
+		token:            token,
+		debug:            stderrDebug,
+		botEndpoint:      TelegramBotEndpoint,
+		downloadEndpoint: TelegramFileDownloadEndpoint,
 	}
 }
 
-func (t *ApiClient) Debug(dbg DebugFunc) {
+func (t *ApiClient) SetDebugFunc(dbg DebugFunc) {
 	t.debug = dbg
+}
+
+func (t *ApiClient) SetBotEndpoint(botEndpoint string) {
+	t.botEndpoint = botEndpoint
+}
+
+func (t *ApiClient) SetDownloadEndpoint(downloadEndpoint string) {
+	t.downloadEndpoint = downloadEndpoint
 }
 
 func (t *ApiClient) Debugf(msg string, args ...interface{}) {
@@ -53,7 +66,7 @@ func (t *ApiClient) Call(httpMethod, apiMethod string, in, out interface{}) erro
 		return err
 	}
 
-	url := fmt.Sprintf("%s%s/%s", TelegramBotEndpoint, t.token, apiMethod)
+	url := fmt.Sprintf("%s%s/%s", t.botEndpoint, t.token, apiMethod)
 
 	req, err := http.NewRequest(httpMethod, url, &buff)
 	if err != nil {
@@ -106,7 +119,7 @@ func (t *ApiClient) GetFile(fileId string) (*File, error) {
 // DownloadFile fetches the file from f.FilePath and writes the content into w.
 func (t *ApiClient) DownloadFile(f *File, w io.Writer) error {
 	// https://api.telegram.org/file/bot<token>/<file_path>
-	url := fmt.Sprintf("%s%s/%s", TelegramFileDownloadEndpoint, t.token, f.FilePath)
+	url := fmt.Sprintf("%s%s/%s", t.downloadEndpoint, t.token, f.FilePath)
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
 		return err
