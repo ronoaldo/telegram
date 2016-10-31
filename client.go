@@ -164,6 +164,19 @@ func (t *ApiClient) SendMessagef(to, formatText string, args ...interface{}) (*M
 	return t.SendMessage(to, fmt.Sprintf(formatText, args...))
 }
 
+func (t *ApiClient) SendMessageKeyboard(to string, text string, keyboard interface{}) (*Message, error) {
+	params := map[string]interface{}{
+		"chat_id":      to,
+		"text":         text,
+		"reply_markup": keyboard,
+	}
+	msg := new(Message)
+	if err := t.Call("POST", "sendMessage", params, msg); err != nil {
+		return nil, err
+	}
+	return msg, nil
+}
+
 // SetWebhook method configures the provided HTTPS endpoint as the bot callback.
 func (t *ApiClient) SetWebhook(httpsURL string) error {
 	out := make(json.RawMessage, 0)
