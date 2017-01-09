@@ -7,6 +7,7 @@ import (
 	"io"
 	"io/ioutil"
 	"log"
+	"mime/multipart"
 	"net/http"
 )
 
@@ -61,20 +62,23 @@ func (t *ApiClient) Debugf(msg string, args ...interface{}) {
 
 func (t *ApiClient) Call(httpMethod, apiMethod string, in, out interface{}) error {
 	var buff bytes.Buffer
-
 	if err := json.NewEncoder(&buff).Encode(in); err != nil {
 		return err
 	}
-
-	url := fmt.Sprintf("%s%s/%s", t.botEndpoint, t.token, apiMethod)
-
+	url := t.endpoint(apiMethod)
 	req, err := http.NewRequest(httpMethod, url, &buff)
 	if err != nil {
 		return err
 	}
-
 	req.Header.Set("Content-Type", "application/json")
+	return t.makeRequest(req, out)
+}
 
+func (t *ApiClient) endpoint(apiMethod string) string {
+	return fmt.Sprintf("%s%s/%s", t.botEndpoint, t.token, apiMethod)
+}
+
+func (t *ApiClient) makeRequest(req *http.Request, out interface{}) error {
 	resp, err := t.client.Do(req)
 	if err != nil {
 		return err
@@ -172,6 +176,59 @@ func (t *ApiClient) SendMessageKeyboard(to string, text string, keyboard interfa
 	}
 	msg := new(Message)
 	if err := t.Call("POST", "sendMessage", params, msg); err != nil {
+		return nil, err
+	}
+	return msg, nil
+}
+
+func (t *ApiClient) SendPhotoURL(to string, text string, photo string) (*Message, error) {
+	params := map[string]interface{}{
+		"chat_id": to,
+		"caption": text,
+		"photo": photo,
+	}
+	msg := new(Message)
+	if err := t.Call("POST", "sendPhoto", params, msg); err != nil {
+		return nil, err
+	}
+	return msg, nil
+}
+
+func (t *ApiClient) SendPhotoFromReader(to string, text string, photo io.Reader) (*Message, error) {
+	// Send photo from reader
+	var b bytes.Buffer
+	w := multipart.NewWriter(&b)
+	fw, err := w.CreateFormFile("photo", "photo.png")
+	if err != nil {
+		return nil, err
+	}
+	if _, err := io.Copy(fw, photo); err != nil {
+		return nil, err
+	}
+
+	if fw, err = w.CreateFormField("chat_id"); err != nil {
+		return nil, err
+	}
+	if _, err = fw.Write([]byte(to)); err != nil {
+		return nil, err
+	}
+
+	if fw, err = w.CreateFormField("caption"); err != nil {
+		return nil, err
+	}
+	if _, err = fw.Write([]byte(text)); err != nil {
+		return nil, err
+	}
+
+	// Send raw form data
+	url := t.endpoint("sendPhoto")
+	req, err := http.NewRequest("POST", url, &b)
+	if err != nil {
+		return nil, err
+	}
+	req.Header.Set("Content-Type", w.FormDataContentType())
+	msg := new(Message)
+	if err = t.makeRequest(req, msg); err != nil {
 		return nil, err
 	}
 	return msg, nil
